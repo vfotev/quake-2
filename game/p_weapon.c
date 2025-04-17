@@ -22,6 +22,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "g_local.h"
 #include "m_player.h"
 
+void ShotgunBurst(edict_t *ent);
+
+qboolean burst_shot_fired;
+
 
 static qboolean	is_quad;
 static byte		is_silenced;
@@ -1213,6 +1217,24 @@ void weapon_shotgun_fire (edict_t *ent)
 		fire_shotgun (ent, start, forward, damage, kick, 500, 500, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
 	else
 		fire_shotgun (ent, start, forward, damage, kick, 500, 500, DEFAULT_SHOTGUN_COUNT, MOD_SHOTGUN);
+		gi.dprintf("SHOTGUN FIRED!\n");
+
+	if (!ent->client->burst_shot_fired)
+	{
+		ent->client->burst_shot_fired = true;
+
+		edict_t* burst = G_Spawn();
+		burst->classname = "shotgun_burst";
+		burst->owner = ent;
+		burst->think = ShotgunBurst;
+		burst->nextthink = level.time + 0.3;
+		}
+	else
+	{
+		ent->client->burst_shot_fired = false;
+	}
+
+		
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
@@ -1432,3 +1454,18 @@ void Weapon_BFG (edict_t *ent)
 
 
 //======================================================================
+
+void ShotgunBurst(edict_t* self)
+{
+	edict_t* ent = self->owner;
+
+	if (!ent || !ent->inuse)
+		return;
+
+	gi.dprintf("BURST TRIGGERED!\n");
+
+	ent->client->ps.gunframe = 8;
+	weapon_shotgun_fire(ent);
+
+	G_FreeEdict(self);
+}

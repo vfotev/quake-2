@@ -20,6 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "g_local.h"
 
+extern qboolean waitingForNextWave;
+extern float nextWaveTime;
+
 game_locals_t	game;
 level_locals_t	level;
 game_import_t	gi;
@@ -400,10 +403,35 @@ void G_RunFrame (void)
 		}
 
 		G_RunEntity (ent);
+		if (ent->inuse && (ent->svflags & SVF_MONSTER))
+		{
+			if (ent->spawn_time && (level.time > ent->spawn_time + 10)) 
+			{
+				gi.dprintf("Auto-killing stuck monster!\n");
+				ent->health = 0;
+				ent->deadflag = DEAD_DEAD;
+				ent->takedamage = DAMAGE_NO;
+				ent->think = G_FreeEdict;
+				ent->nextthink = level.time + FRAMETIME;
+			}
+		}
 	}
 
 	// see if it is time to end a deathmatch
 	CheckDMRules ();
+
+	if (waitingForNextWave && level.time >= nextWaveTime)
+	{
+		waitingForNextWave = false;
+
+		edict_t* player = FindAnyPlayer();
+
+		if (player)
+			Cmd_WaveSpawn_f(player);
+		else
+			gi.dprintf("No player found to spawn next wave!\n");
+	}
+
 
 	// build the playerstate_t structures for all players
 	ClientEndServerFrames ();

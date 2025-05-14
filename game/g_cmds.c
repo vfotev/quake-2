@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright (C) 1997-2001 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
@@ -20,6 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "g_local.h"
 #include "m_player.h"
 
+int waveNumber = 1;
+int monstersAlive = 0;
+qboolean waitingForNextWave = false;
+float nextWaveTime = 0;
+
+void WaveMonsterDie(edict_t* self, edict_t* inflictor, edict_t* attacker, int damage, vec3_t point);
 
 char *ClientTeam (edict_t *ent)
 {
@@ -899,6 +905,131 @@ void Cmd_PlayerList_f(edict_t *ent)
 	gi.cprintf(ent, PRINT_HIGH, "%s", text);
 }
 
+/*
+==================
+Cmd_WaveSpawn_f
+==================
+*/
+void Cmd_WaveSpawn_f(edict_t *ent)
+{
+	vec3_t spawn_origin;
+	vec3_t spawn_end;
+	vec3_t mins = { -15, -15, -24 };
+	vec3_t maxs = { 15, 15, 32 };
+	trace_t tr;
+	edict_t* monster;
+	int i;
+	int numToSpawn;
+
+	gi.dprintf("Spawning wave %d!\n", waveNumber);
+
+	numToSpawn = 3 + (waveNumber - 1) * 2;
+
+	for (i = 0; i < numToSpawn; i++)
+	{
+		int tries = 5;
+		qboolean spawned = false;
+
+		while (tries > 0)
+		{
+			VectorCopy(ent->s.origin, spawn_origin);
+			spawn_origin[0] += (crandom() * 300); 
+			spawn_origin[1] += (crandom() * 300);
+			spawn_origin[2] += 40; 
+
+			VectorCopy(spawn_origin, spawn_end);
+			spawn_end[2] -= 128;
+
+			tr = gi.trace(spawn_origin, NULL, NULL, spawn_end, NULL, MASK_SOLID);
+
+			if (tr.fraction < 1.0)
+			{
+				VectorCopy(tr.endpos, spawn_origin);
+				spawn_origin[2] += 24; 
+
+				tr = gi.trace(spawn_origin, mins, maxs, spawn_origin, NULL, MASK_SOLID);
+
+				if (tr.fraction == 1.0)
+				{
+					monster = G_Spawn();
+					monster->classname = "monster_infantry";
+
+					monster->s.origin[0] = spawn_origin[0];
+					monster->s.origin[1] = spawn_origin[1];
+					monster->s.origin[2] = spawn_origin[2];
+					monster->s.angles[YAW] = ent->s.angles[YAW];
+
+					ED_CallSpawn(monster);
+
+					monster->original_die = monster->die;
+					monster->die = WaveMonsterDie;
+					monster->waveMonsterAlreadyCounted = false;
+					monster->spawn_time = level.time;
+
+					monstersAlive++;
+					spawned = true;
+					break; 
+				}
+			}
+
+			tries--; 
+		}
+
+		if (!spawned)
+		{
+			gi.dprintf("Warning: Could not find valid spawn spot for monster #%d\n", i + 1);
+			monstersAlive--;
+		}
+	}
+
+
+	waveNumber++;
+}
+
+void WaveMonsterDie(edict_t* self, edict_t* inflictor, edict_t* attacker, int damage, vec3_t point)
+{
+	
+	if (self->original_die)
+	{
+		self->original_die(self, inflictor, attacker, damage, point);
+	}
+
+	if (self->waveMonsterAlreadyCounted)
+		return;
+
+	self->waveMonsterAlreadyCounted = true;
+
+	monstersAlive--;
+
+	if (monstersAlive <= 0 && !waitingForNextWave)
+	{
+		gi.dprintf("Wave Cleared! Spawning next wave.\n");
+		waitingForNextWave = true;
+		nextWaveTime = level.time + 3.0f;
+	}
+
+}
+
+edict_t* FindAnyPlayer(void)
+{
+	int i;
+	edict_t* ent;
+
+	for (i = 1; i <= maxclients->value; i++)
+	{
+		ent = &g_edicts[i];
+
+		if (!ent->inuse)
+			continue;
+		if (!ent->client)
+			continue;
+
+		return ent; 
+	}
+
+	return NULL; 
+}
+
 
 /*
 =================
@@ -987,6 +1118,8 @@ void ClientCommand (edict_t *ent)
 		Cmd_Wave_f (ent);
 	else if (Q_stricmp(cmd, "playerlist") == 0)
 		Cmd_PlayerList_f(ent);
+	else if (Q_stricmp(cmd, "wave_spawn") == 0)
+		Cmd_WaveSpawn_f(ent);
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 }

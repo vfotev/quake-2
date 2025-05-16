@@ -472,7 +472,7 @@ Cmd_Inven_f
 void Cmd_Inven_f (edict_t *ent)
 {
 	int			i;
-	gclient_t	*cl;
+	gclient_t* cl;
 
 	cl = ent->client;
 
@@ -487,12 +487,12 @@ void Cmd_Inven_f (edict_t *ent)
 
 	cl->showinventory = true;
 
-	gi.WriteByte (svc_inventory);
-	for (i=0 ; i<MAX_ITEMS ; i++)
+	gi.WriteByte(svc_inventory);
+	for (i = 0; i < MAX_ITEMS; i++)
 	{
-		gi.WriteShort (cl->pers.inventory[i]);
+		gi.WriteShort(cl->pers.inventory[i]);
 	}
-	gi.unicast (ent, true);
+	gi.unicast(ent, true);
 }
 
 /*
@@ -1000,6 +1000,58 @@ void WaveMonsterDie(edict_t* self, edict_t* inflictor, edict_t* attacker, int da
 	self->waveMonsterAlreadyCounted = true;
 
 	monstersAlive--;
+
+	int dropType = rand() % 14; 
+	gitem_t* item = NULL;
+
+	switch (dropType)
+	{
+	case 0:
+		item = FindItem("Shotgun");
+		break;
+	case 1:
+		item = FindItem("Super Shotgun");
+		break;
+	case 2:
+		item = FindItem("Chaingun");
+		break;
+	case 3:
+		item = FindItem("Machinegun");
+		break;
+	case 4:
+		item = FindItem("Grenade Launcher");
+		break;
+	case 5:
+		item = FindItem("Rocket Launcher");
+		break;
+	case 6:
+		item = FindItem("Railgun");
+		break;
+	case 7:
+		item = FindItem("Bullets");
+		break;
+	case 8:
+		item = FindItem("Shells");
+		break;
+	case 9:
+		item = FindItem("Cells");
+		break;
+	case 10:
+		item = FindItem("item_health");
+		break;
+	case 11:
+		item = FindItem("item_health_large");
+		break;
+	case 12:
+		item = FindItem("jacket armor");
+		break;
+	case 13:
+		item = FindItem("body armor");
+		break;
+	}
+
+	if (item)
+		Drop_Item(self, item);
 
 	if (monstersAlive <= 0 && !waitingForNextWave)
 	{

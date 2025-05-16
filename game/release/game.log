@@ -1,33 +1,7 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  g_cmds.c
-C:\Users\victo\git\quake-2\game\g_cmds.c(40,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(63,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(64,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(728,4): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(731,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(814,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(815,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(816,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(827,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(834,2): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(881,7): warning C4459: declaration of 'st' hides global declaration
-  C:\Users\victo\git\quake-2\game\g_local.h(456,21):
-  see declaration of 'st'
-  
-C:\Users\victo\git\quake-2\game\g_cmds.c(903,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(891,3): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(899,4): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_cmds.c(962,6): warning C4013: 'ED_CallSpawn' undefined; assuming extern returning int
-  g_main.c
-C:\Users\victo\git\quake-2\game\g_main.c(151,2): warning C4996: 'vsprintf': This function or variable may be unsafe. Consider using vsprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_main.c(163,2): warning C4996: 'vsprintf': This function or variable may be unsafe. Consider using vsprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_main.c(236,7): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _strdup. See online help for details.
-C:\Users\victo\git\quake-2\game\g_main.c(238,7): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_main.c(242,9): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_main.c(255,8): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\victo\git\quake-2\game\g_main.c(427,21): warning C4013: 'FindAnyPlayer' undefined; assuming extern returning int
-C:\Users\victo\git\quake-2\game\g_main.c(430,4): warning C4013: 'Cmd_WaveSpawn_f' undefined; assuming extern returning int
-C:\Users\victo\git\quake-2\game\g_main.c(427,12): warning C4047: 'initializing': 'edict_t *' differs in levels of indirection from 'int'
-  Generating Code...
+  p_hud.c
+C:\Users\victo\git\quake-2\game\p_hud.c(164,58): warning C4100: 'killer': unreferenced formal parameter
+C:\Users\victo\git\quake-2\game\p_hud.c(164,44): warning C4100: 'ent': unreferenced formal parameter
+C:\Users\victo\git\quake-2\game\p_hud.c(349): warning C4701: potentially uninitialized local variable 'cells' used
      Creating library .\..\release\gamex86.lib and object .\..\release\gamex86.exp
   game.vcxproj -> C:\Program Files (x86)\Steam\steamapps\common\Quake 2\poop\gamex86.dll

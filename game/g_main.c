@@ -405,12 +405,15 @@ void G_RunFrame (void)
 		G_RunEntity (ent);
 		if (ent->inuse && (ent->svflags & SVF_MONSTER))
 		{
-			if (ent->spawn_time && (level.time > ent->spawn_time + 10)) 
+			if (ent->spawn_time && (level.time > ent->spawn_time + 60)) 
 			{
-				gi.dprintf("Auto-killing stuck monster!\n");
+				gi.dprintf("Auto-killing stuck monster(s)\n");
 				ent->health = 0;
 				ent->deadflag = DEAD_DEAD;
 				ent->takedamage = DAMAGE_NO;
+
+				monstersAlive--;
+
 				ent->think = G_FreeEdict;
 				ent->nextthink = level.time + FRAMETIME;
 			}
